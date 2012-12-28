@@ -10,7 +10,7 @@ public class AnnotatedField {
 	private Field field;
 	
 
-	public AnnotatedField( EJB a, Field f ) {
+	public AnnotatedField( final EJB a, final Field f ) {
 		this.annotation = a;
 		this.field = f;
 	}
@@ -19,13 +19,13 @@ public class AnnotatedField {
 	public EJB getAnnotation() {
 		return annotation;
 	}
-	public void setAnnotation( EJB annotation ) {
+	public void setAnnotation( final EJB annotation ) {
 		this.annotation = annotation;
 	}
 	public Field getField() {
 		return field;
 	}
-	public void setField( Field field ) {
+	public void setField( final Field field ) {
 		this.field = field;
 	}
 	

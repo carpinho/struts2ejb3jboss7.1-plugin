@@ -29,7 +29,8 @@ public class EJBInterceptor extends AbstractInterceptor implements Interceptor {
 		this.cache = InjectEJBCache.getInstance();
 	}
 	
-	public String intercept( ActionInvocation actionInvocation ) throws Exception {
+	@Override
+	public String intercept( final ActionInvocation actionInvocation ) throws Exception {
 		
 		Object action = actionInvocation.getAction();
 		String actionClassName = action.getClass().getName();
@@ -69,7 +70,14 @@ public class EJBInterceptor extends AbstractInterceptor implements Interceptor {
 	}
 	
 	
-	private void injectEJB( Object action, AnnotatedField aField ) throws Exception {
+	/**
+	 * Inject the EJB into the action via JNDI
+	 * 
+	 * @param action The action reference
+	 * @param aField The annotated field with the injection information
+	 * @throws Exception 
+	 */
+	private void injectEJB( final Object action, final AnnotatedField aField ) throws Exception {
 		
 		EJB annotation = aField.getAnnotation();
 		Field field = aField.getField();
@@ -77,7 +85,7 @@ public class EJBInterceptor extends AbstractInterceptor implements Interceptor {
 		//Determine service name
 		StringBuilder serviceName = new StringBuilder( "java:app/" );
 		serviceName.append( annotation.name() );
-		serviceName.append("!");
+		serviceName.append( "!" );
 		serviceName.append( field.getType().getName() );
 		
 		//Try to access the service from the JNDI

@@ -36,38 +36,38 @@ public class InjectEJBCache {
 	
 	/**
 	 * returned cached information for specified class
-	 * @param className
-	 * @return
+	 * @param className 
+	 * @return Get the annotated fields from cache
 	 */
-	public List<AnnotatedField> getAnnotatedFields( String className ) {
+	public List<AnnotatedField> getAnnotatedFields( final String className ) {
 		
 		return cache.get( className );
 	}
 	
 	/**
 	 * cache class field (ejb) annotation info
-	 * @param className
-	 * @param fields
+	 * @param className 
+	 * @param fields 
 	 */
-	public void cacheAnnotatedFields( String className, List<AnnotatedField> fields ) {
+	public void cacheAnnotatedFields( final String className, final List<AnnotatedField> fields ) {
 		cache.put( className, fields );
 		info.put( className, Boolean.TRUE );
 	}
 	
 	/**
 	 * returns information on class having EJBInject annotations inside
-	 * @param className
-	 * @return
+	 * @param className 
+	 * @return Check whether the given class has annotations
 	 */
-	public Boolean hasEJBAnnotations( String className ) {
+	public Boolean hasEJBAnnotations( final String className ) {
 		return info.get( className );
 	}
 	
 	/**
 	 * set this class as not EJB aware
-	 * @param className
+	 * @param className 
 	 */
-	public void noEJBAnnotations( String className ) {
+	public void noEJBAnnotations( final String className ) {
 		info.put( className, Boolean.FALSE );
 	}
 	
