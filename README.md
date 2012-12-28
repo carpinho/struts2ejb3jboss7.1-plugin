@@ -6,7 +6,7 @@ Using for a specific situation, patches are welcome.
 Unit tests not yet implemented.
 
 Enables to inject EJB3 beans into actions via annotations. For example:
-```xml
+```java
 @EJB(name="MyProject/UserSessionBean")
 private UserSessionLocal userSessionLocal;
 ```
