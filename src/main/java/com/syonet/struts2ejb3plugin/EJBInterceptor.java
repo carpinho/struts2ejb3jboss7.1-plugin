@@ -52,7 +52,7 @@ public class EJBInterceptor extends AbstractInterceptor implements Interceptor {
 				if ( field.isAnnotationPresent( EJB.class ) ) {
 					
 					//Found EJBInject annotations
-					AnnotatedField aField = new AnnotatedField( (EJB) field.getAnnotation( EJB.class ), field );
+					AnnotatedField aField = new AnnotatedField( ( EJB ) field.getAnnotation( EJB.class ), field );
 					this.injectEJB( action, aField );
 					annotatedFields.add( aField );
 				}
