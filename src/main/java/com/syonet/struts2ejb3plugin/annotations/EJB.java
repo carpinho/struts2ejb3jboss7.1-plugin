@@ -1,4 +1,4 @@
-package com.syonet.struts2ejb3plugin;
+package com.syonet.struts2ejb3plugin.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

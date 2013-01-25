@@ -40,7 +40,6 @@ public class InjectEJBCache {
 	 * @return Get the annotated fields from cache
 	 */
 	public List<AnnotatedField> getAnnotatedFields( final String className ) {
-		
 		return cache.get( className );
 	}
 	

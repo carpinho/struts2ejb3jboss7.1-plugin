@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.naming.InitialContext;
-
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 import com.opensymphony.xwork2.interceptor.Interceptor;
+import com.syonet.struts2ejb3plugin.annotations.EJB;
 import com.syonet.struts2ejb3plugin.cache.AnnotatedField;
 import com.syonet.struts2ejb3plugin.cache.InjectEJBCache;
 
@@ -24,9 +23,13 @@ public class EJBInterceptor extends AbstractInterceptor implements Interceptor {
 	// cache of annotated fields
 	private InjectEJBCache cache;
 	
+	// injector class
+	private EJBInjector EJBInjector;
+	
 	public EJBInterceptor() {
 		super();
 		this.cache = InjectEJBCache.getInstance();
+		this.EJBInjector = new EJBInjector();
 	}
 	
 	@Override
@@ -40,23 +43,23 @@ public class EJBInterceptor extends AbstractInterceptor implements Interceptor {
 			//Hit the cache
 			List<AnnotatedField> aFields = this.cache.getAnnotatedFields( action.getClass().getName() );
 			for ( Iterator<AnnotatedField> it = aFields.iterator(); it.hasNext(); ) {
-				this.injectEJB( action, it.next() );
+				EJBInjector.inject( action, it.next() );
 			}
 		} else if ( hasEJBAnnotations == null ) {
 			
 			//Unknown yet
 			List<AnnotatedField> annotatedFields = new ArrayList<AnnotatedField>();
 			
-			for ( Field field : action.getClass().getDeclaredFields() ) {
+			for ( Field field : FieldsManager.getAllDeclaredFields( action.getClass() ) ) {
 				
 				if ( field.isAnnotationPresent( EJB.class ) ) {
 					
 					//Found EJBInject annotations
 					AnnotatedField aField = new AnnotatedField( ( EJB ) field.getAnnotation( EJB.class ), field );
-					this.injectEJB( action, aField );
+					EJBInjector.inject( action, aField );
 					annotatedFields.add( aField );
 				}
-			}		
+			}
 			
 			//Cache data
 			if ( annotatedFields.size() == 0 ) {
@@ -67,40 +70,6 @@ public class EJBInterceptor extends AbstractInterceptor implements Interceptor {
 		}
 		
 		return actionInvocation.invoke();
-	}
-	
-	
-	/**
-	 * Inject the EJB into the action via JNDI
-	 * 
-	 * @param action The action reference
-	 * @param aField The annotated field with the injection information
-	 * @throws Exception 
-	 */
-	private void injectEJB( final Object action, final AnnotatedField aField ) throws Exception {
-		
-		EJB annotation = aField.getAnnotation();
-		Field field = aField.getField();
-		
-		//Determine service name
-		StringBuilder serviceName = new StringBuilder( "java:app/" );
-		serviceName.append( annotation.name() );
-		serviceName.append( "!" );
-		serviceName.append( field.getType().getName() );
-		
-		//Try to access the service from the JNDI
-		Object service = null;
-		try {
-			InitialContext ic = new InitialContext();
-			service = ic.lookup( serviceName.toString() );
-		} finally {
-			if ( service != null ) {
-				boolean wasAccessible = field.isAccessible();
-				field.setAccessible( true );
-				field.set( action, service );
-				field.setAccessible( wasAccessible );
-			}
-		}
 	}
 	
 }

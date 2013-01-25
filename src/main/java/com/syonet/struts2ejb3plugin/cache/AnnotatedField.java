@@ -2,7 +2,7 @@ package com.syonet.struts2ejb3plugin.cache;
 
 import java.lang.reflect.Field;
 
-import com.syonet.struts2ejb3plugin.EJB;
+import com.syonet.struts2ejb3plugin.annotations.EJB;
 
 public class AnnotatedField {
 
